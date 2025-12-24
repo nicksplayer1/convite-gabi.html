@@ -1,0 +1,486 @@
+ <!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Convite pra Gabi 🎁</title>
+  <style>
+    :root{
+      /* ✅ FUNDO: suave e escuro (não machuca os olhos) */
+      --bgA:#0b1020;   /* azul bem escuro */
+      --bgB:#101a36;   /* azul/roxo */
+      --bgC:#1b1230;   /* roxo escuro */
+
+      --card:#0f172a;  /* slate */
+      --card2:#111c33;
+      --ink:#e8eaf2;   /* texto claro */
+      --muted: rgba(232,234,242,.72);
+      --line: rgba(255,255,255,.10);
+
+      --accent:#ff6aa2;
+      --accent2:#8a5cff;
+      --dark:#0b1224;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+
+      /* fundo escuro suave */
+      background:
+        radial-gradient(900px 520px at 20% 15%, rgba(138,92,255,.18), transparent 65%),
+        radial-gradient(900px 520px at 80% 75%, rgba(255,106,162,.14), transparent 65%),
+        linear-gradient(180deg, var(--bgB), var(--bgA));
+      overflow:auto;
+    }
+
+    .wrap{
+      width:min(760px, 94vw);
+      padding:22px;
+      margin:0 auto;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      gap:10px;
+      position:relative;
+      z-index:1;
+    }
+
+    h1{ margin:16px 0 6px; font-size:22px; text-align:center; }
+    p{ margin:0; color:var(--muted); text-align:center; }
+
+    /* Coraçõezinhos discretos */
+    .heart{
+      position:fixed; left:0; top:0;
+      font-size:18px; opacity:.10;
+      animation: floatUp linear infinite;
+      user-select:none; pointer-events:none;
+      filter: blur(.2px);
+      z-index:0;
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(110vh) translateX(0) rotate(0deg); }
+      to  { transform: translateY(-140vh) translateX(70px) rotate(18deg); }
+    }
+
+    /* Presente */
+    .gift-area{ margin:10px 0 6px; display:grid; place-items:center; position:relative; z-index:2; }
+    .gift{
+      width:210px; height:180px; position:relative;
+      cursor:pointer;
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,.40));
+      transition: transform .15s ease, filter .2s ease;
+    }
+    .gift:hover{ filter: drop-shadow(0 24px 36px rgba(0,0,0,.45)); }
+    .gift:active{ transform: translateY(1px) scale(.995); }
+
+    .box{
+      position:absolute; left:0; right:0; bottom:0;
+      height:125px; border-radius:22px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+    .ribbon-v{
+      position:absolute; left:50%; transform:translateX(-50%);
+      width:38px; height:125px; bottom:0;
+      background: rgba(255,255,255,.30);
+      border-radius:12px;
+    }
+    .ribbon-h{
+      position:absolute; left:0; right:0; bottom:58px;
+      height:32px;
+      background: rgba(255,255,255,.30);
+      border-radius:12px;
+      margin:0 14px;
+    }
+    .lid{
+      position:absolute; left:-10px; right:-10px; top:36px;
+      height:62px; border-radius:22px;
+      background: linear-gradient(135deg, rgba(255,106,162,.95), rgba(138,92,255,.95));
+      transform-origin: 18% 100%;
+      transition: transform .65s cubic-bezier(.2,.8,.2,1);
+    }
+    .bow{
+      position:absolute; left:50%; top:10px; transform:translateX(-50%);
+      width:84px; height:52px;
+    }
+    .bow:before,.bow:after{
+      content:""; position:absolute; top:14px;
+      width:40px; height:28px;
+      border-radius:999px;
+      background: rgba(255,255,255,.45);
+    }
+    .bow:before{ left:0; transform:rotate(-12deg); }
+    .bow:after { right:0; transform:rotate(12deg); }
+    .knot{
+      position:absolute; left:50%; top:24px; transform:translateX(-50%);
+      width:18px; height:18px; border-radius:999px;
+      background: rgba(255,255,255,.55);
+    }
+    .opened .lid{ transform: rotate(-42deg) translateY(-10px); }
+
+    /* Cartão */
+    .card{
+      width:100%;
+      background: linear-gradient(180deg, var(--card2), var(--card));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      box-shadow: 0 16px 46px rgba(0,0,0,.45);
+      padding:18px;
+      text-align:left;
+
+      max-height: 0;
+      opacity: 0;
+      overflow:hidden;
+      transform: translateY(18px);
+      transition: max-height .8s ease, opacity .35s ease, transform .55s ease;
+
+      position:relative;
+      z-index:2;
+    }
+    .card.open{
+      max-height: 80vh;
+      opacity: 1;
+      overflow:auto;
+      transform: translateY(0);
+    }
+
+    .hello{ font-weight:900; font-size:18px; margin:2px 0 6px; }
+    .sub{ color:var(--muted); margin-bottom:12px; }
+
+    .panel{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:18px;
+      padding:14px;
+      background: linear-gradient(180deg, rgba(138,92,255,.10), rgba(255,106,162,.08));
+      margin:12px 0;
+    }
+
+    .big{
+      font-size:16px;
+      line-height:1.4;
+      margin:0;
+      color: rgba(232,234,242,.92);
+    }
+
+    /* Botões */
+    .btns{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    button{
+      border:0;
+      padding:12px 14px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, opacity .2s ease;
+      user-select:none;
+    }
+    button:active{ transform: translateY(1px) }
+
+    .primary{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:white;
+      box-shadow: 0 12px 26px rgba(255,106,162,.22);
+    }
+
+    .ghost{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      color: var(--ink);
+    }
+
+    .dark{
+      background: rgba(0,0,0,.35);
+      border:1px solid rgba(255,255,255,.14);
+      color:#fff;
+      box-shadow: 0 12px 26px rgba(0,0,0,.20);
+    }
+
+    .toast{
+      margin-top:10px;
+      font-weight:900;
+      color: rgba(232,234,242,.85);
+      min-height:22px;
+    }
+
+    /* Confete */
+    .conf{
+      position:fixed;
+      width:10px; height:14px;
+      border-radius:2px;
+      top:-10px;
+      opacity:.95;
+      z-index:9999;
+      pointer-events:none;
+      transition: transform 2.8s linear, opacity 2.8s linear;
+    }
+
+    /* Botão NÃO */
+    #noBtn{
+      touch-action: manipulation;
+      transition: transform .12s ease;
+      position:relative;
+    }
+
+    /* Mensagem pronta */
+    .output{
+      margin-top:10px;
+      background: rgba(0,0,0,.25);
+      border:1px dashed rgba(255,255,255,.22);
+      border-radius:16px;
+      padding:12px;
+      white-space:pre-wrap;
+      line-height:1.35;
+      color: rgba(232,234,242,.92);
+    }
+    .hint{ font-size:12px; color: rgba(232,234,242,.62); margin-top:8px; }
+
+    @media (max-width: 520px){
+      .gift{ transform: scale(.92); }
+      .card{ padding:14px; }
+      h1{ font-size:20px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <h1>Gabi… tem um presente pra você 🎁</h1>
+    <p>(clica no presente, sem medo… eu acho 😇)</p>
+
+    <div class="gift-area">
+      <div class="gift" id="gift" aria-label="Presente">
+        <div class="lid"></div>
+        <div class="bow"><div class="knot"></div></div>
+        <div class="box"></div>
+        <div class="ribbon-v"></div>
+        <div class="ribbon-h"></div>
+      </div>
+    </div>
+
+    <div class="card" id="card" aria-live="polite">
+      <div class="hello">Oi, Gabi! 😳</div>
+      <div class="sub">Você tem um convite oficial 😳</div>
+
+      <div class="panel">
+        <p class="big">Eu queria te chamar pra sair comigo.</p>
+        <p class="big" style="margin-top:8px">
+          Tipo… <strong>um rolê</strong> pra gente rir, conversar e comer alguma coisa gostosa 😳
+        </p>
+      </div>
+
+      <div class="panel">
+        <p class="big" id="mission">
+          Planos do dia: <strong>aceitar</strong> esse convite. Recompensa:
+          <strong>momentos bons + risadas 😳</strong> 
+        </p>
+
+        <div class="btns">
+          <button class="primary" id="yesBtn">ACEITO 👍</button>
+          <button class="ghost" id="noBtn">Não 🙈</button>
+          <button class="dark" id="surpriseBtn">Surpresa 🎲</button>
+        </div>
+
+        <div class="toast" id="toast">Escolhe com responsabilidade (ou não) 😌</div>
+      </div>
+
+      <div class="panel" id="finalPanel" style="display:none">
+        <div style="font-weight:900; margin-bottom:8px;">so aceitar agora:</div>
+        <div class="output" id="output">—</div>
+
+        <div class="btns" style="margin-top:10px">
+          <button class="primary" id="copyBtn">Copiar</button>
+          <button class="ghost" id="resetBtn">De novo 😈</button>
+        </div>
+
+        <div class="hint">....</div>
+      </div>
+    </div>
+
+    <div style="height:24px"></div>
+  </div>
+
+  <script>
+    // ====== Corações (fundo discreto) ======
+    const hearts = ["💗","💖","💘","💞","💕","💜"];
+    for(let i=0;i<14;i++){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+      h.style.left = (Math.random()*100) + "vw";
+      h.style.animationDuration = (9 + Math.random()*10) + "s";
+      h.style.fontSize = (14 + Math.random()*18) + "px";
+      document.body.appendChild(h);
+    }
+
+    // ====== refs ======
+    const gift = document.getElementById("gift");
+    const card = document.getElementById("card");
+    const toast = document.getElementById("toast");
+
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const surpriseBtn = document.getElementById("surpriseBtn");
+
+    const finalPanel = document.getElementById("finalPanel");
+    const output = document.getElementById("output");
+    const copyBtn = document.getElementById("copyBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    let opened = false;
+    let lastMessage = "";
+    let lastMove = 0;
+
+    // ====== Confete ======
+    function confetti(amount=70){
+      for(let i=0;i<amount;i++){
+        const c = document.createElement("div");
+        c.className = "conf";
+        c.style.left = (Math.random()*100) + "vw";
+        c.style.background = `hsl(${Math.random()*360} 90% 60%)`;
+        document.body.appendChild(c);
+
+        const fall = 2.2 + Math.random()*1.4;
+        c.style.transition = `transform ${fall}s linear, opacity ${fall}s linear`;
+        requestAnimationFrame(() => {
+          c.style.transform =
+            `translateY(115vh) rotate(${Math.random()*720}deg) translateX(${Math.random()*120-60}px)`;
+          c.style.opacity = 0;
+        });
+
+        setTimeout(() => c.remove(), fall*1000);
+      }
+    }
+
+    function setToast(msg){ toast.textContent = msg; }
+
+    // ====== Abrir presente ======
+    gift.addEventListener("click", () => {
+      if(opened) return;
+      opened = true;
+      gift.classList.add("opened");
+      card.classList.add("open");
+      confetti(35);
+      card.scrollIntoView({ behavior: "smooth", block: "start" });
+      setToast("Ok… agora você já sabe demais 😳");
+    });
+
+    // ====== Mensagens surpresa ======
+    const SURPRISE_LINES = [
+      "Eu te convoco oficialmente: bora sair pra rir e comer alguma coisa? 😄🍦",
+      "Convite sério (mentira):rolê  HOJE/essa semana 🤔",
+      "Gabi, missão: jantar ou cinema ou você que manda",
+      "Prometo 3 coisas: risada, conversa boa e um docinho. Topa? 🍦💞",
+      "Convite: você + eu + um lugar legal = história pra contar depois 😄"
+    ];
+
+    function makeMessage(kind){
+      const base =
+`oiii Gabi! 😳😳😳😳
+Tenho um convite MUITO importante:
+
+Bo sair comigo essa semana ou de preferencia hoje?
+
+
+Se topar, responde: “ACEITO” no caso no zapzap capiche? 😉`;
+
+      if(kind === "yes"){
+        return base + "\n\n";
+      }
+      if(kind === "surprise"){
+        const line = SURPRISE_LINES[Math.floor(Math.random()*SURPRISE_LINES.length)];
+        return (
+`oiii Gabi! 😳😳
+${line}
+
+Se topar, manda um “ACEITO” e eu já combino com você 😌✨`
+        );
+      }
+      return base;
+    }
+
+    function showFinal(msg){
+      lastMessage = msg;
+      output.textContent = msg;
+      finalPanel.style.display = "block";
+      confetti(110);
+      setToast("💌💌💌💌💌");
+      finalPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    yesBtn.addEventListener("click", () => showFinal(makeMessage("yes")));
+    surpriseBtn.addEventListener("click", () => showFinal(makeMessage("surprise")));
+
+    // ====== Botão NÃO (desktop + mobile) ======
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function moveNoButton(){
+      const now = Date.now();
+      if(now - lastMove < 250) return;
+      lastMove = now;
+
+      const cardRect = card.getBoundingClientRect();
+      const btnRect  = noBtn.getBoundingClientRect();
+
+      const maxX = (cardRect.right - btnRect.width) - btnRect.left;
+      const minX = (cardRect.left) - btnRect.left;
+      const maxY = (cardRect.bottom - btnRect.height) - btnRect.top;
+      const minY = (cardRect.top) - btnRect.top;
+
+      const isMobile = window.matchMedia("(max-width: 520px)").matches;
+      const rangeX = isMobile ? 80 : 140;
+      const rangeY = isMobile ? 50 : 90;
+
+      const dx = clamp((Math.random()*2 - 1) * rangeX, minX, maxX);
+      const dy = clamp((Math.random()*2 - 1) * rangeY, minY, maxY);
+
+      noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+      setToast("Epa! esse botão não gosta de ser clicado 🙈");
+    }
+
+    noBtn.addEventListener("mouseenter", () => {
+      if(window.matchMedia("(hover: hover)").matches) moveNoButton();
+    });
+
+    noBtn.addEventListener("pointerdown", (e) => {
+      if(e.pointerType === "touch"){
+        moveNoButton();
+        e.preventDefault();
+      }
+    });
+
+    noBtn.addEventListener("click", () => {
+      setToast("Você clicou no NÃO? isso foi… ousado 😂 (tenta de novo)");
+      confetti(25);
+    });
+
+    // ====== Copiar ======
+    copyBtn.addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(lastMessage || output.textContent);
+        setToast("Copiado😄 é so isso mesmo");
+      }catch(e){
+        const temp = document.createElement("textarea");
+        temp.value = lastMessage || output.textContent;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        temp.remove();
+        setToast("Copiado! ✅");
+      }
+    });
+
+    // ====== Reset ======
+    resetBtn.addEventListener("click", () => {
+      finalPanel.style.display = "none";
+      output.textContent = "—";
+      noBtn.style.transform = "translate(0,0)";
+      setToast("Ok… rodada nova 😈");
+      confetti(18);
+    });
+  </script>
+</body>
+</html>
